@@ -1,0 +1,52 @@
+---
+- name: Common | Override default data with user one
+  set_fact:
+    ttrss: "{{ ttrss_common_data | combine(ttrss_common_group, ttrss_common_host, recursive=True) }}"
+  tags:
+    - always
+
+- name: Install needed packages
+  package:
+    name: "{{ ttrss.packages }}"
+    state: installed
+
+- name: Clone Tiny Tiny RSS repository
+  git:
+    dest: /var/www/ttrss
+    repo: https://tt-rss.org/git/tt-rss.git
+    accept_hostkey: yes
+    force: yes
+
+- name: Create TTRSS database if none
+  mysql_db:
+    name: "{{ ttrss.mysql_database }}"
+    login_user: root
+    login_password: "{{ ttrss.mysql_root_password }}"
+    state: present
+  register: create_mysql_database
+
+- name: Configure user and password for TTRSS table
+  mysql_user:
+    name: "{{ ttrss.mysql_user }}"
+    password: "{{ ttrss.mysql_password }}"
+    priv: "{{ ttrss.mysql_database }}.*:ALL,GRANT"
+    login_user: root
+    login_password: "{{ ttrss.mysql_root_password }}"
+    state: present
+  register: create_mysql_user
+
+- name: Wait for TTRSS to be configured
+  wait_for:
+    path: "/var/www/ttrss/config.php"
+  when: create_mysql_database is changed or create_mysql_user is changed
+
+- name: Create feeds update service
+  template:
+    src: ttrss.service
+    dest: /etc/systemd/system/ttrss.service
+  notify: Restart ttrss daemon
+
+- name: Enable feeds update service
+  service:
+    name: ttrss
+    enabled: yes

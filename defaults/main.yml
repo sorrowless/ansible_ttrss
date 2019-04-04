@@ -1,0 +1,18 @@
+---
+ttrss_common_data:
+  packages:
+    - php-fpm
+    - php7.0-cli
+    - php7.0-curl
+    - php7.0-mbstring
+    - php7.0-json
+    - php7.0-gd
+    - php7.0-pgsql
+    - php7.0-xml
+    - php7.0-opcache
+  mysql_database: ttrss
+  mysql_root_password: password
+  mysql_ttrss_user: ttrss
+  mysql_ttrss_password: ttrss
+ttrss_common_group: {}
+ttrss_common_host: {}
