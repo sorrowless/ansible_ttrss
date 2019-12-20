@@ -8,7 +8,7 @@
 - name: Install needed packages
   package:
     name: "{{ ttrss.packages }}"
-    state: installed
+    state: present
 
 - name: Clone Tiny Tiny RSS repository
   git:
