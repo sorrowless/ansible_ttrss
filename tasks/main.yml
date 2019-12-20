@@ -46,6 +46,19 @@
     dest: /etc/systemd/system/ttrss.service
   notify: Restart ttrss daemon
 
+- name: Ensure dirs are writable
+  file:
+    state: directory
+    path: "/var/www/ttrss/{{ item }}"
+    owner: www-data
+    group: www-data
+  with_items:
+    - cache/images
+    - cache/upload
+    - cache/export
+    - feed-icons
+    - lock
+
 - name: Enable feeds update service
   service:
     name: ttrss

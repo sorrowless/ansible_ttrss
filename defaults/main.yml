@@ -10,6 +10,8 @@ ttrss_common_data:
     - php7.2-pgsql
     - php7.2-xml
     - php7.2-opcache
+    - php7.2-mysql
+    - php7.2-intl
     - python3-pymysql
   mysql_database: ttrss
   mysql_root_password: password
