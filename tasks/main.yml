@@ -23,6 +23,7 @@
     login_user: root
     login_password: "{{ ttrss.mysql_root_password }}"
     state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
   register: create_mysql_database
 
 - name: Configure user and password for TTRSS table
@@ -33,6 +34,7 @@
     login_user: root
     login_password: "{{ ttrss.mysql_root_password }}"
     state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
   register: create_mysql_user
 
 - name: Wait for TTRSS to be configured

@@ -3,7 +3,7 @@ Description=ttrss
 After=network.target mysql.service
 
 [Service]
-User=nginx
+User=www-data
 ExecStart=/var/www/ttrss/update_daemon2.php
 
 [Install]
